@@ -386,7 +386,7 @@ function renderR(div,search=''){
   pl.forEach(p=>{
     const r=p.r;const cls=r===1?'g1':r===2?'g2':r===3?'g3':r<=10?'g10':'';
     h+=`<tr><td class="rn ${cls}">${r}</td>
-      <td><span class="pl" onclick="openP('${p.n.replace(/'/g,"\'")}')">${p.n}</span></td>
+      <td><span class="pl" onclick="openP('${p.n.replace(/'/g,"\'")}','${div}')">${p.n}</span></td>
       <td><span class="pb">${p.p.toLocaleString()}</span></td>
       <td style="color:var(--mt)">${p.t}</td>
       <td><span class="bt">${p.b}</span></td></tr>`;
@@ -395,22 +395,32 @@ function renderR(div,search=''){
   document.getElementById('rtbl').innerHTML=h;
 }
 
-function openP(name){
+function openP(name, ctxDiv){
   const keys=Object.keys(C).filter(k=>k.startsWith(name+'|'));
   if(!keys.length)return;
   document.getElementById('mn').textContent=name;
 
-  // Division badges — exclude divisions where player only appears as mixed partner
+  // Division badges
   const allDivs=keys.map(k=>{const d=k.split('|')[1];const rk=R[d]?R[d].find(p=>p.n===name):null;return {div:d,rank:rk?rk.r:null,pts:rk?rk.p:null};});
   let sub='';
-  allDivs.forEach(d=>{if(d.rank)sub+=`<span class="mrb">#${d.rank} ${d.div} — ${d.pts.toLocaleString()} pts</span>`;else sub+=`<span class="mdb">${d.div}</span>`;});
+  allDivs.forEach(d=>{
+    const active=ctxDiv&&d.div===ctxDiv?'style="border:1px solid #00c864"':'';
+    if(d.rank)sub+=`<span class="mrb" ${active}>#${d.rank} ${d.div} — ${d.pts.toLocaleString()} pts</span>`;
+    else sub+=`<span class="mdb" ${active}>${d.div}</span>`;
+  });
   document.getElementById('ms').innerHTML=sub;
 
-  // Aggregate career
+  // Stats for context division (or all if no context)
+  const ph=PH[name]||[];
+  const phCtx=ctxDiv?ph.filter(m=>m.div===ctxDiv):ph;
+
+  // Aggregate career for context division
   let totalPts=0,totalT=0,bestPts=0,bestCat='';
   const byYr={};
-  keys.forEach(k=>{
+  const keysCtx=ctxDiv?keys.filter(k=>k.endsWith('|'+ctxDiv)):keys;
+  keysCtx.forEach(k=>{
     const x=C[k];
+    if(!x)return;
     totalPts+=x.tp;totalT+=x.tt;
     if(x.bp>bestPts){bestPts=x.bp;bestCat=x.br;}
     Object.entries(x.by||{}).forEach(([y,yd])=>{
@@ -419,19 +429,23 @@ function openP(name){
       byYr[y].top3=[...byYr[y].top3,...(yd.top3||[])];
     });
   });
+  // Fallback to all divisions if context has no C data
+  if(totalPts===0){keys.forEach(k=>{const x=C[k];if(!x)return;totalPts+=x.tp;totalT+=x.tt;if(x.bp>bestPts){bestPts=x.bp;bestCat=x.br;}});}
 
-  let b=`<div class="msg">
+  const divLabel=ctxDiv||'Toutes divisions';
+  let b=`<div style="font-size:11px;color:var(--mt2);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px">${divLabel}</div>`;
+  b+=`<div class="msg">
     <div class="ms"><div class="ms-n">${totalPts.toLocaleString()}</div><div class="ms-l">Career Pts</div></div>
-    <div class="ms"><div class="ms-n">${totalT}</div><div class="ms-l">Tournois</div></div>
+    <div class="ms"><div class="ms-n">${phCtx.length}</div><div class="ms-l">Matchs</div></div>
     <div class="ms"><div class="ms-n" style="font-size:14px">${bestCat||'—'}</div><div class="ms-l">Best Cat</div></div>
     <div class="ms"><div class="ms-n">${bestPts||'—'}</div><div class="ms-l">Best Score</div></div>
   </div>`;
 
-  // Career chart
+  // Career chart (context division)
   const yrs=['2024','2025','2026'];
   const ypts=yrs.map(y=>byYr[y]?byYr[y].points:0);
   const mx=Math.max(...ypts,1);
-  b+=`<div class="msect"><div class="mst">Progression Carrière</div><div class="cch">`;
+  b+=`<div class="msect"><div class="mst">Progression Carrière${ctxDiv?' — '+ctxDiv:''}</div><div class="cch">`;
   yrs.forEach((y,i)=>{
     const pts=ypts[i];const pct=Math.round(pts/mx*100);const cnt=byYr[y]?byYr[y].count:0;
     b+=`<div class="cbw"><div class="cbn">${pts?pts.toLocaleString():''}</div>
@@ -443,16 +457,15 @@ function openP(name){
   });
   b+=`</div></div>`;
 
-  // Top counting results from PH
-  const ph=PH[name]||[];
-  const counting=ph.filter(m=>m.c===1).sort((a,z)=>z.pts-a.pts);
+  // Top 8 counting results (context division only)
+  const counting=phCtx.filter(m=>m.c===1).sort((a,z)=>z.pts-a.pts);
   if(counting.length){
-    b+=`<div class="msect"><div class="mst">🏅 Top Résultats (comptants)</div><div class="rrl">`;
+    b+=`<div class="msect"><div class="mst">🏅 Top 8 comptants — ${ctxDiv||'Toutes divisions'}</div><div class="rrl">`;
     counting.forEach(m=>{
       const partner=m.partner&&m.partner!='NAN'&&m.partner!='nan'&&m.partner!==''?m.partner:null;
       b+=`<div class="rr">
-        <span class="rc cat-${(m.cat||'').toLowerCase().replace(/[^a-z0-9]/g,'')}">${m.cat||'?'}</span>
-        ${partner?`<span style="font-size:12px;color:var(--mt)">w/ <span class="pl" onclick="closeM();setTimeout(()=>openP('${partner.replace(/'/g,"\\'")}'),50)">${partner}</span></span>`:''}
+        <span class="rc">${m.cat||'?'}</span>
+        ${partner?`<span style="font-size:12px;color:var(--mt)">w/ <span class="pl" onclick="closeM();setTimeout(()=>openP('${partner.replace(/'/g,"\\'")}','${ctxDiv||""}'),50)">${partner}</span></span>`:''}
         <span style="font-size:11px;color:var(--mt2);flex:1">${m.club||''}${m.d?' · '+m.d:''}</span>
         <span class="rp">${m.pts} pts</span>
       </div>`;
@@ -460,23 +473,31 @@ function openP(name){
     b+=`</div></div>`;
   }
 
-  // Best partner
+  // Best partner (context division)
   const partnerCounts={};
-  ph.forEach(m=>{if(m.partner&&m.partner!='NAN'&&m.partner!='nan'&&m.partner!=='')partnerCounts[m.partner]=(partnerCounts[m.partner]||0)+1;});
+  phCtx.forEach(m=>{if(m.partner&&m.partner!='NAN'&&m.partner!='nan'&&m.partner!=='')partnerCounts[m.partner]=(partnerCounts[m.partner]||0)+1;});
   const bpArr=Object.entries(partnerCounts).sort((a,z)=>z[1]-a[1]);
   if(bpArr.length){
-    b+=`<div class="msect"><div class="mst">Partenaire Favori</div>
+    b+=`<div class="msect"><div class="mst">Partenaire Favori${ctxDiv?' — '+ctxDiv:''}</div>
       <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--c1);border-radius:5px;border:1px solid var(--bd)">
         <span style="font-size:20px">🤝</span>
-        <span class="pl" onclick="closeM();setTimeout(()=>openP('${bpArr[0][0].replace(/'/g,"\\'")}'),50)">${bpArr[0][0]}</span>
+        <span class="pl" onclick="closeM();setTimeout(()=>openP('${bpArr[0][0].replace(/'/g,"\\'")}','${ctxDiv||""}'),50)">${bpArr[0][0]}</span>
         <span style="font-size:12px;color:var(--mt2);margin-left:auto">${bpArr[0][1]} matchs</span>
       </div></div>`;
   }
 
-  // Full match history
-  if(ph.length){
+  // Full match history (context division)
+  if(phCtx.length){
     const divColors={'MEN':'#0066cc','WOMEN':'#cc0066','MIXED':'#6600cc','U15':'#cc6600'};
-    b+=`<div class="msect"><div class="mst">📋 Historique complet (${ph.length} matchs)</div>
+    const otherDivs=allDivs.filter(d=>d.div!==ctxDiv&&ph.filter(m=>m.div===d.div).length>0);
+    b+=`<div class="msect"><div class="mst">📋 Historique — ${ctxDiv||'Toutes divisions'} (${phCtx.length} matchs)`;
+    if(ctxDiv&&otherDivs.length){
+      otherDivs.forEach(d=>{
+        const cnt=ph.filter(m=>m.div===d.div).length;
+        b+=` <span class="mdb" style="cursor:pointer;font-size:11px" onclick="openP('${name.replace(/'/g,"\\'")}','${d.div}')">${d.div} (${cnt})</span>`;
+      });
+    }
+    b+=`</div>
     <table style="width:100%;border-collapse:collapse;font-size:12px">
       <thead><tr style="color:var(--mt2);border-bottom:1px solid var(--bd)">
         <th style="text-align:left;padding:4px 6px">Date</th>
@@ -486,15 +507,15 @@ function openP(name){
         <th style="text-align:center;padding:4px 6px">Rk</th>
         <th style="text-align:right;padding:4px 6px">Pts</th>
       </tr></thead><tbody>`;
-    ph.forEach(m=>{
+    phCtx.forEach(m=>{
       const partner=m.partner&&m.partner!='NAN'&&m.partner!='nan'&&m.partner!==''?m.partner:'—';
       const cnt=m.c===1?'style="background:rgba(0,200,100,0.06)"':'';
       const divDot=`<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${divColors[m.div]||'#888'};margin-right:4px;vertical-align:middle"></span>`;
       b+=`<tr ${cnt} style="border-bottom:1px solid rgba(255,255,255,0.04)">
         <td style="padding:4px 6px;color:var(--mt2)">${m.d||'—'}</td>
         <td style="padding:4px 6px">${divDot}<span class="rc" style="font-size:10px">${m.cat||'?'}</span></td>
-        <td style="padding:4px 6px;color:var(--mt);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${m.club||'—'}</td>
-        <td style="padding:4px 6px">${partner!=='—'?`<span class="pl" onclick="closeM();setTimeout(()=>openP('${partner.replace(/'/g,"\\'")}'),50)" style="font-size:12px">${partner}</span>`:partner}</td>
+        <td style="padding:4px 6px;color:var(--mt);max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${m.club||'—'}</td>
+        <td style="padding:4px 6px">${partner!=='—'?`<span class="pl" onclick="closeM();setTimeout(()=>openP('${partner.replace(/'/g,"\\'")}','${m.div}'),50)" style="font-size:12px">${partner}</span>`:partner}</td>
         <td style="padding:4px 6px;text-align:center;font-weight:600;color:${m.rank===1?'#00c864':m.rank<=3?'#f5c518':'var(--mt)'}">#${m.rank}</td>
         <td style="padding:4px 6px;text-align:right;font-weight:600;color:${m.c===1?'#00c864':'var(--fg)'}">${m.pts}${m.c===1?' ✓':''}</td>
       </tr>`;
