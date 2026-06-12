@@ -533,7 +533,7 @@ function renderClubs(){
   CL.filter(c=>c.name!=='UNKNOWN').forEach(c=>{
     const lk=CLMAP[c.name];const li=lk&&LG.clubs&&LG.clubs[lk];
     const lhtml=li?`<img class="cll" src="${li}" alt="${c.name}">`:`<div style="width:52px;height:52px;background:#0a0a0a;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:22px">🏟️</div>`;
-    const tp=(c.top_players||[]).slice(0,3).map(p=>`<div style="font-size:12px;padding:2px 0"><span class="pl" onclick="openP('${p.name.replace(/'/g,"\'")}');event.stopPropagation()">#${p.rank} ${p.name}</span></div>`).join('');
+    const tp=(c.top_players||[]).slice(0,3).map((p,i)=>`<div style="font-size:12px;padding:2px 0"><span class="pl" onclick="openP('${(p.n||'').replace(/'/g,"\\'")}');event.stopPropagation()">${i+1}. ${p.n||''} (${p.p||0}pts)</span></div>`).join('');
     const cd=cdMap[c.name];
     const catBadges=cd?Object.entries(cd.cats).sort((a,b)=>b[1]-a[1]).map(([cat,n])=>`<span class="cc-cat-badge ${CAT_CLR[cat]||''}">${cat} ×${n}</span>`).join(''):'';
     const safeName=c.name.replace(/'/g,"\'");
@@ -772,7 +772,7 @@ function openClub(name){
   // Stats
   h+=`<div class="cm-stats">
     <div class="cm-stat"><div class="cm-stat-n">${cd.players}</div><div class="cm-stat-l">Joueurs</div></div>
-    <div class="cm-stat"><div class="cm-stat-n">${cd.tournaments}</div><div class="cm-stat-l">Tournois</div></div>
+    <div class="cm-stat"><div class="cm-stat-n">${(cd.tournaments||[]).length}</div><div class="cm-stat-l">Tournois</div></div>
     <div class="cm-stat"><div class="cm-stat-n">${cd.results}</div><div class="cm-stat-l">Résultats</div></div>
   </div>`;
   // Category breakdown
@@ -781,21 +781,20 @@ function openClub(name){
   // Top players
   if(cd.top&&cd.top.length){
     h+=`<div style="font-family:var(--ffc);font-weight:700;font-size:12px;color:var(--mt);letter-spacing:1px;margin-bottom:8px">TOP JOUEURS</div>`;
-    h+=cd.top.slice(0,5).map(p=>`<div style="display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid var(--bd);font-size:13px"><span style="color:var(--mt);min-width:55px;font-size:11px">${p.div}</span><span class="pl" onclick="openP('${p.name.replace(/'/g,"\\'")}');event.stopPropagation()">${p.name}</span><span style="margin-left:auto;color:var(--ac);font-family:var(--ffc);font-weight:700">${p.pts.toLocaleString()}</span></div>`).join('');
+    h+=cd.top.slice(0,5).map(p=>`<div style="display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid var(--bd);font-size:13px"><span style="color:var(--mt);min-width:55px;font-size:11px">${p.div}</span><span class="pl" onclick="openP('${p.n.replace(/'/g,"\\'")}');event.stopPropagation()">${p.n}</span><span style="margin-left:auto;color:var(--ac);font-family:var(--ffc);font-weight:700">${p.p.toLocaleString()}</span></div>`).join('');
     h+='<div style="margin-bottom:14px"></div>';
   }
   // Recent tournaments
   h+=`<div style="font-family:var(--ffc);font-weight:700;font-size:12px;color:var(--mt);letter-spacing:1px;margin-bottom:8px">HISTORIQUE DES TOURNOIS</div>`;
   h+='<div class="cm-tlist">';
-  cd.recent.forEach(t=>{
+  (cd.tournaments||[]).slice(0,15).forEach(t=>{
     const d=t.date?new Date(t.date+'T00:00:00').toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'}):'';
-    const wHtml=Object.entries(t.w||{}).map(([div,winner])=>`<div><span style="color:var(--mt);font-size:10px;margin-right:4px">${DIV_LBL[div]||div}</span><span style="font-size:11px">🥇 ${winner}</span></div>`).join('');
     const tid=`${t.date}|${t.cat}|${name}`;
     h+=`<div class="cm-tr" onclick="closeM();setTimeout(()=>openTournament('${tid.replace(/'/g,"\\'")}'),100)">
       <div class="cm-tr-head"><span class="tc-cat ${CAT_CLR_T[t.cat]||''}">${t.cat}</span><span style="color:var(--mt);font-size:12px;margin-left:auto">${d}</span></div>
-      ${wHtml?`<div class="cm-winners">${wHtml}</div>`:''}
     </div>`;
   });
+  if(!(cd.tournaments||[]).length)h+=`<div style="color:var(--mt);font-size:13px;padding:8px 0">Aucun tournoi enregistré</div>`;
   h+='</div>';
   document.getElementById('mb').innerHTML=h;
   document.getElementById('modal').classList.add('on');
