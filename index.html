@@ -594,12 +594,8 @@ function renderClubs(sortKey='score'){
   }));
 
   // Sort
-  const sortFn = {
-    score:(a,b)=>b.score-a.score,
-    tournaments:(a,b)=>b.tournaments-a.tournaments,
-    players:(a,b)=>b.players-a.players,
-    results:(a,b)=>b.results-a.results,
-  }[sortKey]||(a,b)=>b.score-a.score;
+  const sortFns={score:(a,b)=>b.score-a.score,tournaments:(a,b)=>b.tournaments-a.tournaments,players:(a,b)=>b.players-a.players,results:(a,b)=>b.results-a.results};
+  const sortFn=sortFns[sortKey]||((a,b)=>b.score-a.score);
 
   clubs.sort(sortFn);
 
