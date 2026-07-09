@@ -76,9 +76,9 @@ body{background:var(--bk);color:var(--tx);font-family:'Barlow',sans-serif;min-he
 .rc{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:var(--g);min-width:55px}
 .rp{font-weight:800;font-size:15px;margin-left:auto}
 .rpa{font-size:11px;color:var(--mt);margin-left:8px}
-.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px}
-.cc{background:var(--c1);border:1px solid var(--bd);border-radius:8px;padding:22px;transition:.2s}
-.cc:hover{border-color:var(--g);transform:translateY(-2px)}
+.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px}.club-sort-bar{display:flex;gap:10px;margin-bottom:24px;align-items:center;flex-wrap:wrap}.club-sort-btn{padding:6px 16px;border:1px solid var(--bd);background:transparent;color:var(--mt);font-family:var(--ffc);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;border-radius:4px;cursor:pointer;transition:.2s}.club-sort-btn.on{background:var(--g);border-color:var(--g);color:#000}.club-podium{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:32px}@media(max-width:900px){.club-podium{grid-template-columns:1fr}}
+.cc{background:var(--c1);border:1px solid var(--bd);border-radius:10px;padding:20px 22px;transition:.25s;cursor:pointer;position:relative;overflow:hidden}
+.cc:hover{border-color:var(--g);box-shadow:0 0 24px rgba(0,200,100,.12);transform:translateY(-2px)}
 .cch2{display:flex;align-items:center;gap:14px;margin-bottom:14px}
 .cll{width:52px;height:52px;object-fit:contain;border-radius:4px;background:#0a0a0a;padding:3px}
 .ccn{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;text-transform:uppercase;letter-spacing:1px}
@@ -150,7 +150,7 @@ body{background:var(--bk);color:var(--tx);font-family:'Barlow',sans-serif;min-he
 .tc-winner .gold{color:#f5c518;font-weight:700}
 /* ── CLUB CARDS enhanced ─────────────────────────────────────── */
 .cc{cursor:pointer;transition:border-color .2s,transform .2s}
-.cc:hover{border-color:var(--ac);transform:translateY(-2px)}
+.cc:hover{border-color:var(--g);box-shadow:0 0 24px rgba(0,200,100,.12);transform:translateY(-2px)}
 .cc-cats{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
 .cc-cat-badge{font-size:10px;font-family:var(--ffc);font-weight:700;padding:2px 6px;border-radius:3px}
 /* ── MODAL DETAIL ────────────────────────────────────────────── */
@@ -195,6 +195,43 @@ body{background:var(--bk);color:var(--tx);font-family:'Barlow',sans-serif;min-he
 .tc-div-section:last-child{margin-bottom:0}
 .tc-div-label{font-family:var(--ffc);font-weight:900;font-size:10px;letter-spacing:1.5px;color:var(--mt);margin-bottom:4px;padding-bottom:3px;border-bottom:1px solid var(--bd)}
 
+
+/* ── Club Premium ─────────────────────────────────── */
+.cc-pod{background:linear-gradient(135deg,#0e1a14 0%,#0d1410 100%);border:1px solid rgba(0,200,100,.25);border-radius:12px;padding:24px;position:relative;overflow:hidden;cursor:pointer;transition:.25s}
+.cc-pod:hover{border-color:var(--g);box-shadow:0 0 32px rgba(0,200,100,.18);transform:translateY(-3px)}
+.cc-pod-rank{position:absolute;top:16px;right:16px;font-family:'Barlow Condensed',sans-serif;font-size:48px;font-weight:900;opacity:.07;line-height:1}
+.cc-pod-medal{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:14px;font-weight:900}
+.medal-1{background:linear-gradient(135deg,#ffd700,#b8860b);box-shadow:0 0 16px rgba(255,215,0,.4)}
+.medal-2{background:linear-gradient(135deg,#c0c0c0,#808080);box-shadow:0 0 12px rgba(192,192,192,.3)}
+.medal-3{background:linear-gradient(135deg,#cd7f32,#8b4513);box-shadow:0 0 12px rgba(205,127,50,.3)}
+.cc-pod-name{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.cc-pod-score{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--g);margin-bottom:16px}
+.cc-pod-score span{font-size:11px;color:var(--mt);font-weight:500;letter-spacing:1px;margin-left:4px;vertical-align:middle}
+.cc-pod-stats{display:flex;gap:16px;margin-bottom:14px}
+.cc-pod-stat{text-align:center}
+.cc-pod-stat-n{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:var(--mt2)}
+.cc-pod-stat-l{font-size:9px;color:var(--mt);text-transform:uppercase;letter-spacing:.8px}
+.cc-header{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.cc-badge{width:44px;height:44px;border-radius:8px;background:#0a0a0a;border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.cc-badge-txt{width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,#00c864,#006830);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900;color:#000;flex-shrink:0}
+.cc-name{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;text-transform:uppercase;letter-spacing:.3px;line-height:1.2}
+.cc-power{font-size:11px;color:var(--g);font-family:var(--ffc);font-weight:700;margin-top:2px}
+.cc-stats-row{display:flex;gap:0;margin-bottom:12px;background:#0a0a0a;border-radius:6px;overflow:hidden}
+.cc-stat{flex:1;padding:8px 4px;text-align:center;border-right:1px solid var(--bd)}
+.cc-stat:last-child{border-right:none}
+.cc-stat-n{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;color:var(--mt2)}
+.cc-stat-l{font-size:9px;color:var(--mt);text-transform:uppercase;letter-spacing:.6px}
+.cc-cats{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:12px}
+.cc-player-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-top:1px solid rgba(255,255,255,.05)}
+.cc-player-row:first-child{border-top:none}
+.cc-player-idx{font-family:'Barlow Condensed',sans-serif;font-size:11px;color:var(--mt);width:14px;text-align:right;flex-shrink:0}
+.cc-player-name{font-size:12px;font-weight:600;flex:1;cursor:pointer;transition:.15s}
+.cc-player-name:hover{color:var(--g)}
+.cc-player-rank{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;flex-shrink:0}
+.cc-div-men{color:#60a5fa}.cc-div-women{color:#f472b6}.cc-div-mixed{color:#a78bfa}.cc-div-u15{color:#fb923c}
+.cc-player-pts{font-family:'Barlow Condensed',sans-serif;font-size:11px;color:var(--mt);flex-shrink:0}
+.cc-players-section{margin-top:10px}
+.cc-section-title{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--mt);margin-bottom:6px;font-family:var(--ffc);font-weight:700}
 </style>
 </head>
 <body>
@@ -241,6 +278,13 @@ body{background:var(--bk);color:var(--tx);font-family:'Barlow',sans-serif;min-he
 
 <div class="pg" id="pg-clubs">
   <div class="stitle">Clubs</div>
+  <div class="club-sort-bar">
+    <button class="club-sort-btn on" onclick="sortClubs('score',this)">Power Score</button>
+    <button class="club-sort-btn" onclick="sortClubs('tournaments',this)">Tournois</button>
+    <button class="club-sort-btn" onclick="sortClubs('players',this)">Joueurs</button>
+    <button class="club-sort-btn" onclick="sortClubs('results',this)">Résultats</button>
+  </div>
+  <div class="club-podium" id="clubPodium"></div>
   <div class="cg" id="clubGrid"></div>
 </div>
 
@@ -525,29 +569,130 @@ function openP(name, ctxDiv){
 function closeM(){document.getElementById('modal').classList.remove('on');}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM();});
 
-function renderClubs(){
+function renderClubs(sortKey='score'){
   const CAT_CLR={'M1000':'cat-m1000','M500':'cat-m500','M250':'cat-m250','M100':'cat-m100','M50':'cat-m50','M25':'cat-m25'};
-  let h='';
+  const DIV_CLR={'MEN':'cc-div-men','WOMEN':'cc-div-women','MIXED':'cc-div-mixed','U15':'cc-div-u15'};
+  const DIV_ICON={'MEN':'♂','WOMEN':'♀','MIXED':'⚥','U15':'★'};
+
+  // Lookup player's best rank across all divisions
+  const getRank = (name) => {
+    let best=null;
+    for(const div of ['MEN','WOMEN','MIXED','U15']){
+      const found=R[div]&&R[div].find(p=>p.n===name);
+      if(found&&(!best||found.r<best.r)) best={r:found.r,d:div,p:found.p};
+    }
+    return best;
+  };
+
   // Build cat breakdown from CD
   const cdMap={};CD.forEach(c=>{cdMap[c.name]=c;});
-  CL.filter(c=>c.name!=='UNKNOWN').forEach(c=>{
+
+  // Calculate power score for each club = sum of top_players points
+  const clubs = CL.filter(c=>c.name!=='UNKNOWN').map(c=>({
+    ...c,
+    score: (c.top_players||[]).reduce((s,p)=>s+(p.p||0),0)
+  }));
+
+  // Sort
+  const sortFn = {
+    score:(a,b)=>b.score-a.score,
+    tournaments:(a,b)=>b.tournaments-a.tournaments,
+    players:(a,b)=>b.players-a.players,
+    results:(a,b)=>b.results-a.results,
+  }[sortKey]||(a,b)=>b.score-a.score;
+
+  clubs.sort(sortFn);
+
+  // ── Player row helper ──────────────────────────────────────────────
+  const playerRow=(p,idx)=>{
+    const rk=getRank(p.name);
+    const divCls=rk?DIV_CLR[rk.d]||'':'';
+    const rankStr=rk?`<span class="cc-player-rank ${divCls}">#${rk.r} ${DIV_ICON[rk.d]||rk.d}</span>`:'';
+    const pts=rk?`<span class="cc-player-pts">${rk.p.toLocaleString()} pts</span>`:`<span class="cc-player-pts">${(p.p||0).toLocaleString()} pts</span>`;
+    const safe=p.name.replace(/'/g,"\\'");
+    return `<div class="cc-player-row">
+      <span class="cc-player-idx">${idx+1}</span>
+      <span class="cc-player-name" onclick="openP('${safe}');event.stopPropagation()">${p.name}</span>
+      ${rankStr}${pts}
+    </div>`;
+  };
+
+  // ── Category badges ────────────────────────────────────────────────
+  const catBadges=(name)=>{
+    const cd=cdMap[name];
+    if(!cd)return '';
+    return Object.entries(cd.cats).sort((a,b)=>b[1]-a[1])
+      .map(([cat,n])=>`<span class="cc-cat-badge ${CAT_CLR[cat]||''}">${cat} ×${n}</span>`).join('');
+  };
+
+  // ── Club initials badge ────────────────────────────────────────────
+  const initials=(name)=>{
+    const words=name.split(/\s+/).filter(w=>w.length>2);
+    return words.slice(0,2).map(w=>w[0]).join('');
+  };
+
+  // ── Render badge ───────────────────────────────────────────────────
+  const logoHtml=(c)=>{
     const lk=CLMAP[c.name];const li=lk&&LG.clubs&&LG.clubs[lk];
-    const lhtml=li?`<img class="cll" src="${li}" alt="${c.name}">`:`<div style="width:52px;height:52px;background:#0a0a0a;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:22px">🏟️</div>`;
-    const tp=(c.top_players||[]).slice(0,3).map(p=>`<div style="font-size:12px;padding:2px 0"><span class="pl" onclick="openP('${p.name.replace(/'/g,"\\'")}');event.stopPropagation()">#${p.rank} ${p.name}</span></div>`).join('');
-    const cd=cdMap[c.name];
-    const catBadges=cd?Object.entries(cd.cats).sort((a,b)=>b[1]-a[1]).map(([cat,n])=>`<span class="cc-cat-badge ${CAT_CLR[cat]||''}">${cat} ×${n}</span>`).join(''):'';
-    const safeName=c.name.replace(/'/g,"\\'");
-    h+=`<div class="cc" onclick="openClub('${safeName}')"><div class="cch2">${lhtml}<div class="ccn">${c.name}</div></div>
-      <div class="ccs">
-        <div class="cs"><div class="cs-n">${c.players}</div><div class="cs-l">Joueurs</div></div>
-        <div class="cs"><div class="cs-n">${c.tournaments}</div><div class="cs-l">Tournois</div></div>
-        <div class="cs"><div class="cs-n">${c.results}</div><div class="cs-l">Résultats</div></div>
+    return li
+      ? `<img style="width:44px;height:44px;object-fit:contain;border-radius:6px" src="${li}" alt="${c.name}">`
+      : `<div class="cc-badge-txt">${initials(c.name)}</div>`;
+  };
+
+  // ── PODIUM (top 3) ─────────────────────────────────────────────────
+  const medals=[{cls:'medal-1',icon:'🥇',pos:1},{cls:'medal-2',icon:'🥈',pos:2},{cls:'medal-3',icon:'🥉',pos:3}];
+  let podHtml='';
+  clubs.slice(0,3).forEach((c,i)=>{
+    const m=medals[i];
+    const safe=c.name.replace(/'/g,"\\'");
+    const top3=(c.top_players||[]).slice(0,3).map((p,j)=>playerRow(p,j)).join('');
+    const cats=catBadges(c.name);
+    podHtml+=`<div class="cc-pod" onclick="openClub('${safe}')">
+      <div class="cc-pod-rank">${m.pos}</div>
+      <div class="cc-pod-medal ${m.cls}">${m.icon}</div>
+      <div class="cc-pod-name">${c.name}</div>
+      <div class="cc-pod-score">${c.score.toLocaleString()}<span>POWER SCORE</span></div>
+      <div class="cc-pod-stats">
+        <div class="cc-pod-stat"><div class="cc-pod-stat-n">${c.players}</div><div class="cc-pod-stat-l">Joueurs</div></div>
+        <div class="cc-pod-stat"><div class="cc-pod-stat-n">${c.tournaments}</div><div class="cc-pod-stat-l">Tournois</div></div>
+        <div class="cc-pod-stat"><div class="cc-pod-stat-n">${c.results}</div><div class="cc-pod-stat-l">Résultats</div></div>
       </div>
-      ${catBadges?`<div class="cc-cats">${catBadges}</div>`:''}
-      ${tp?`<div style="border-top:1px solid var(--bd);padding-top:10px">${tp}</div>`:''}
+      ${cats?`<div class="cc-cats">${cats}</div>`:''}
+      ${top3?`<div class="cc-players-section"><div class="cc-section-title">Top Joueurs</div>${top3}</div>`:''}
     </div>`;
   });
-  document.getElementById('clubGrid').innerHTML=h;
+  document.getElementById('clubPodium').innerHTML=podHtml;
+
+  // ── GRID (rank 4+) ─────────────────────────────────────────────────
+  let gridHtml='';
+  clubs.slice(3).forEach((c,idx)=>{
+    const safe=c.name.replace(/'/g,"\\'");
+    const top3=(c.top_players||[]).slice(0,3).map((p,j)=>playerRow(p,j)).join('');
+    const cats=catBadges(c.name);
+    gridHtml+=`<div class="cc" onclick="openClub('${safe}')">
+      <div class="cc-header">
+        ${logoHtml(c)}
+        <div>
+          <div class="cc-name">${c.name}</div>
+          <div class="cc-power">⚡ ${c.score.toLocaleString()} pts</div>
+        </div>
+      </div>
+      <div class="cc-stats-row">
+        <div class="cc-stat"><div class="cc-stat-n">${c.players}</div><div class="cc-stat-l">Joueurs</div></div>
+        <div class="cc-stat"><div class="cc-stat-n">${c.tournaments}</div><div class="cc-stat-l">Tournois</div></div>
+        <div class="cc-stat"><div class="cc-stat-n">${c.results}</div><div class="cc-stat-l">Résultats</div></div>
+      </div>
+      ${cats?`<div class="cc-cats">${cats}</div>`:''}
+      ${top3?`<div class="cc-players-section"><div class="cc-section-title">Top Joueurs</div>${top3}</div>`:''}
+    </div>`;
+  });
+  document.getElementById('clubGrid').innerHTML=gridHtml;
+}
+
+function sortClubs(key, btn){
+  document.querySelectorAll('.club-sort-btn').forEach(b=>b.classList.remove('on'));
+  if(btn) btn.classList.add('on');
+  renderClubs(key);
 }
 
 function renderHoF(){
